@@ -1,0 +1,55 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and customize the values
+
+# Project Configuration
+project_name = "ordering-system"
+environment  = "dev"
+
+# AWS Configuration
+aws_region = "us-east-1"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+public_subnet_cidrs = [
+  "10.0.1.0/24",
+  "10.0.2.0/24"
+]
+private_subnet_cidrs = [
+  "10.0.10.0/24",
+  "10.0.20.0/24"
+]
+
+# ECS Configuration
+fargate_cpu    = 256    # 256, 512, 1024, 2048, 4096
+fargate_memory = 512    # Min 512, Max 30720 (in MiB)
+app_count      = 2      # Number of app instances
+container_port = 8080   # Port exposed by the container
+
+# Application Configuration
+app_image_tag = "latest"
+
+# Auto Scaling Configuration
+auto_scaling_enabled        = true
+min_capacity               = 1
+max_capacity               = 6
+target_cpu_utilization     = 70
+target_memory_utilization  = 80
+
+# Health Check Configuration
+health_check_path       = "/health"
+health_check_interval   = 30
+health_check_timeout    = 5
+healthy_threshold       = 2
+unhealthy_threshold     = 3
+
+# Logging Configuration
+log_retention_days = 7
+
+# Common Tags
+common_tags = {
+  Project     = "ordering-system"
+  Environment = "dev"
+  ManagedBy   = "terraform"
+  Owner       = "devops"
+  CostCenter  = "engineering"
+}

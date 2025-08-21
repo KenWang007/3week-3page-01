@@ -1,0 +1,76 @@
+# .dockerignore file for Ordering System
+
+# Build artifacts
+bin/
+obj/
+out/
+
+# IDE files
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Terraform
+infrastructure/
+*.tf
+*.tfvars
+*.tfstate
+*.tfplan
+
+# Scripts
+scripts/
+
+# CI/CD
+.github/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Node modules (if any)
+node_modules/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# Package files
+*.nupkg
+*.snupkg
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Images
+images/
+*.png
+*.jpg
+*.jpeg
+*.gif
