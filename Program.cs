@@ -1,5 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OrderingSystem.Models;
 using OrderingSystem.Repositories;
 using OrderingSystem.Services;
@@ -9,6 +13,68 @@ namespace OrderingSystem
     class Program
     {
         static async Task Main(string[] args)
+        {
+            // Check if running in web mode (default for containers) or console demo mode
+            bool runAsWebApi = args.Length == 0 || Array.Exists(args, arg => arg.Equals("--web", StringComparison.OrdinalIgnoreCase));
+            
+            if (runAsWebApi)
+            {
+                await RunWebApi(args);
+            }
+            else
+            {
+                await RunConsoleDemo();
+            }
+        }
+
+        static async Task RunWebApi(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            
+            // Register repositories and services
+            builder.Services.AddSingleton<IOrderRepository, InMemoryOrderRepository>();
+            builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
+            // Add CORS for development
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseCors();
+            app.UseAuthorization();
+            app.MapControllers();
+
+            // Add health check endpoint
+            app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+
+            Console.WriteLine("=== C# Ordering System Web API ===");
+            Console.WriteLine($"Starting web server on port {app.Environment.IsDevelopment() ? "5000" : "8080"}");
+            
+            await app.RunAsync();
+        }
+
+        static async Task RunConsoleDemo()
         {
             Console.WriteLine("=== C# Ordering System Demo ===\n");
 
