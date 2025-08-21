@@ -1,0 +1,34 @@
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Project Configuration
+project_name = "ordering-system"
+environment  = "dev"
+
+# Network Configuration
+vpc_cidr           = "10.0.0.0/16"
+enable_nat_gateway = true
+
+# Container Configuration
+container_name    = "ordering-system-app"
+container_port    = 8080
+health_check_path = "/"
+
+# Task Configuration
+task_cpu    = "256"   # 0.25 vCPU
+task_memory = "512"   # 512 MB
+
+# Scaling Configuration
+desired_count    = 2
+min_capacity     = 1
+max_capacity     = 10
+cpu_threshold    = 70
+memory_threshold = 80
+
+# Logging Configuration
+log_retention_days        = 7
+enable_container_insights = true
+
+# Optional: Domain Configuration
+# domain_name     = "ordering-system.example.com"
+# certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxx"
